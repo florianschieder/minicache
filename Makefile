@@ -1,17 +1,21 @@
-SHELL = /bin/sh
+MAKE = make
 
-OBJS = main.o
-CFLAG = -Wall -g
-CC = gcc
+minicache:
+	make -C minicache/
 
-minicache.out: ${OBJS}
-	${CC} ${CFLAGS} ${INCLUDES} -o $@ ${OBJS} ${LIBS}
+examples:
+	make -C examples/
 
-run: minicache.out
-	./minicache.out
+install:
+	make -C minicache/ install
 
 clean:
-	-rm -f *.o
+	make -C examples/ clean
+	make -C minicache/ clean
 
-.o:
-	${CC} ${CFLAGS} ${INCLUDES} -c $<
+test:
+	flake8
+	isort
+	python3 -m rstcheck *.rst
+
+.PHONY: minicache examples
